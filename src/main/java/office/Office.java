@@ -1,28 +1,28 @@
-package buildings;
+package office;
 
 import exceptions.InvalidRoomsCountException;
 import exceptions.InvalidSpaceAreaException;
 import interfaces.Space;
 
-public class Flat implements Space {
+public class Office implements Space {
 
     private double square;
     private int roomCount;
 
-    private static int ROOMS_DEFAULT = 2;
-    private static double SQUARE_DEFAULT = 50;
+    private static int ROOMS_DEFAULT = 1;
+    private static double SQUARE_DEFAULT = 250;
 
-    public Flat() {
+    public Office() {
         this.square = SQUARE_DEFAULT;
         this.roomCount = ROOMS_DEFAULT;
     }
 
-    public Flat(double square) {
+    public Office(double square) {
         this.square = square;
         this.roomCount = ROOMS_DEFAULT;
     }
 
-    public Flat(double square, int roomCount) {
+    public Office(double square, int roomCount) {
         if (square <= 0) {
             throw new InvalidSpaceAreaException();
         }

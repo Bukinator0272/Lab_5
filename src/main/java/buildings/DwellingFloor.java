@@ -1,10 +1,18 @@
 package buildings;
 
-public class DwellingFloor {
+import exceptions.InvalidRoomsCountException;
+import exceptions.SpaceIndexOutOfBoundsException;
+import interfaces.Floor;
+import interfaces.Space;
+
+public class DwellingFloor implements Floor {
 
     private Flat[] flats;
 
     public DwellingFloor(int flatsCount) {
+        if ((flatsCount < 0)) {
+            throw new InvalidRoomsCountException();
+        }
         this.flats = new Flat[flatsCount];
         for (int i = 0; i < flatsCount; i++) {
             flats[i] = new Flat();
@@ -15,7 +23,7 @@ public class DwellingFloor {
         this.flats = flats;
     }
 
-    public int getFlatsCount() {
+    public int getSpacesCount() {
         return flats.length;
     }
 
@@ -35,35 +43,32 @@ public class DwellingFloor {
         return count;
     }
 
-    public Flat[] getFlats() {
+    public Space[] getSpaceArray() {
         return flats;
     }
 
-    public Flat getFlatById (int Id) {
+    public Space getSpace(int Id) {
         if ((Id >= flats.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return null;
+            throw new SpaceIndexOutOfBoundsException();
         }
         return flats[Id];
     }
 
-    public void updateFlatById (int Id, Flat newFlat) {
+    public void updateSpace(int Id, Space newSpace) {
         if ((Id >= flats.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return;
+            throw new SpaceIndexOutOfBoundsException();
         }
-        this.flats[Id] = newFlat;
+        this.flats[Id] = (Flat) newSpace;
     }
 
-    public void addFlat(int Id, Flat newFlat) {
+    public void addSpace(int Id, Space newSpace) {
         if ((Id > flats.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return;
+            throw new SpaceIndexOutOfBoundsException();
         }
         Flat[] newFlats = new Flat[flats.length + 1];
         for (int i = 0; i < newFlats.length; i++) {
             if (i == Id) {
-                newFlats[Id] = newFlat;
+                newFlats[Id] = (Flat) newSpace;
             } else if (i < Id) {
                 newFlats[i] = flats[i];
             } else {
@@ -73,23 +78,22 @@ public class DwellingFloor {
         flats = newFlats;
     }
 
-    public void deleteFlatById (int Id) {
+    public void deleteSpace(int Id) {
         if ((Id >= flats.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return;
+            throw new SpaceIndexOutOfBoundsException();
         }
         Flat[] newFlats = new Flat[flats.length - 1];
         for (int i = 0; i < flats.length - 1; i++) {
-            if ( i < Id ) {
+            if (i < Id) {
                 newFlats[i] = flats[i];
             } else {
-                newFlats[i] = flats[i+1];
+                newFlats[i] = flats[i + 1];
             }
         }
         flats = newFlats;
     }
 
-    public Flat getBestSpace() {
+    public Space getBestSpace() {
         double bestSpace = 0;
         Flat flatBestSpace = null;
         for (int i = 0; i < flats.length; i++) {

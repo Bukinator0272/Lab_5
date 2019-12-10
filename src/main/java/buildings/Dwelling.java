@@ -1,6 +1,12 @@
 package buildings;
 
-public class Dwelling {
+import exceptions.FloorIndexOutOfBoundsException;
+import exceptions.InvalidRoomsCountException;
+import interfaces.Building;
+import interfaces.Floor;
+import interfaces.Space;
+
+public class Dwelling implements Building {
 
     private DwellingFloor[] dwellingFloors;
 
@@ -19,18 +25,18 @@ public class Dwelling {
         return dwellingFloors.length;
     }
 
-    public int getFlatsCount() {
+    public int getSpacesCount() {
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
         }
         return count;
     }
 
-    public int getSquaresCount() {
+    public double getSquaresCount() {
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
         }
         return count;
     }
@@ -38,89 +44,86 @@ public class Dwelling {
     public int getRoomsCount() {
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
         }
         return count;
     }
 
-    public DwellingFloor[] getDwellingFloors() {
+    public Floor[] getFloorsArray() {
         return dwellingFloors;
     }
 
-    public DwellingFloor getFloorById(int Id) {
+    public Floor getFloor(int Id) {
         if ((Id >= dwellingFloors.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return null;
+            throw new FloorIndexOutOfBoundsException();
         }
         return dwellingFloors[Id];
     }
 
-    public void updateFloor(int Id, DwellingFloor newDwellingFloor) {
+    public void updateFloor(int Id, Floor newFloor) {
         if ((Id >= dwellingFloors.length) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return;
+            throw new FloorIndexOutOfBoundsException();
         }
-        this.dwellingFloors[Id] = newDwellingFloor;
+        this.dwellingFloors[Id] = (DwellingFloor) newFloor;
     }
 
-    public Flat getFlatById(int Id) {
-        if ((Id >= getFlatsCount()) || (Id < 0)) {
-            System.out.println("Id out of bounds");
-            return null;
+    public Space getSpace(int Id) {
+        if ((Id >= dwellingFloors.length) || (Id < 0)) {
+            throw new InvalidRoomsCountException();
         }
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
             if (count >= Id) {
-                return dwellingFloors[i].getFlatById(count - Id - 1);
+                return dwellingFloors[i].getSpace(count - Id - 1);
             }
         }
         return null;
     }
 
-    public void updateFlatById(int Id, Flat newFlat) {
-        if ((Id >= getFlatsCount()) || (Id < 0)) {
-            System.out.println("Id out of bounds");
+    public void updateSpace(int Id, Space newSpace) {
+        if ((Id >= dwellingFloors.length) || (Id < 0)) {
+            throw new InvalidRoomsCountException();
         }
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
             if (count >= Id) {
-                dwellingFloors[i].updateFlatById(count - Id - 1, newFlat);
+                dwellingFloors[i].updateSpace(count - Id - 1, newSpace);
             }
         }
     }
 
-    public void addFlat(int Id, Flat newFlat) {
-        if ((Id > getFlatsCount()) || (Id < 0)) {
-            System.out.println("Id out of bounds");
+    public void addSpace(int Id, Space newSpace) {
+        if ((Id > dwellingFloors.length) || (Id < 0)) {
+            throw new InvalidRoomsCountException();
         }
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
             if (count >= Id) {
-                dwellingFloors[i].addFlat(count - Id - 1, newFlat);
+                dwellingFloors[i].addSpace(count - Id - 1, newSpace);
             }
         }
     }
 
-    public void deleteFlatById(int Id) {
-        if ((Id >= getFlatsCount()) || (Id < 0)) {
-            System.out.println("Id out of bounds");
+    public void deleteSpace(int Id) {
+        if ((Id >= dwellingFloors.length) || (Id < 0)) {
+            throw new InvalidRoomsCountException();
         }
         int count = 0;
         for (int i = 0; i < dwellingFloors.length; i++) {
-            count += dwellingFloors[i].getFlatsCount();
+            count += dwellingFloors[i].getSpacesCount();
             if (count >= Id) {
-                dwellingFloors[i].deleteFlatById(count - Id - 1);
+                dwellingFloors[i].deleteSpace(count - Id - 1);
             }
         }
     }
 
-    public Flat getBestSpace() {
-        Flat bestFlat = dwellingFloors[0].getBestSpace();
+    public Space getBestSpace() {
+        Space bestFlat = dwellingFloors[0].getBestSpace();
         for (int i = 1; i < dwellingFloors.length; i++) {
-            Flat tempFlat = getBestSpace();
+            Flat tempFlat = (Flat) getBestSpace();
             if (tempFlat.getSquare() > bestFlat.getSquare()) {
                 bestFlat = tempFlat;
             }
@@ -128,20 +131,30 @@ public class Dwelling {
         return bestFlat;
     }
 
-    public Flat[] getFlatArraySortedByFloorId(int Id) {
-        Flat temp;
+    public Space[] getSpaceArraySorted() {
+        Space[] flats = new Space[getSpacesCount()];
+        int floorNum = 0, i = 0;
+        for (; i < dwellingFloors[floorNum].getSpacesCount(); i++) {
+            flats[i] = dwellingFloors[floorNum].getSpaceArray()[i];
+            if (i == dwellingFloors[floorNum].getSpacesCount()) {
+                floorNum++;
+                i = 0;
+            }
+        }
+        Space temp;
         int min;
-        for (int i = 0; i < dwellingFloors[Id].getFlatsCount() - 1; i++) {
-            min = i;
-            for (int j = i + 1; j < dwellingFloors[Id].getFlatsCount(); j++) {
-                if (dwellingFloors[Id].getFlats()[j].getSquare() < dwellingFloors[Id].getFlats()[min].getSquare()) {
+        for (int k = 0; k < getSpacesCount() - 1; k++) {
+            min = k;
+            for (int j = k + 1; j < getSpacesCount(); j++) {
+                if (flats[j].getSquare() > flats[min].getSquare()) {
                     min = j;
                 }
             }
-            temp = dwellingFloors[Id].getFlats()[min];
-            dwellingFloors[Id].getFlats()[min] = dwellingFloors[Id].getFlats()[i];
-            dwellingFloors[Id].getFlats()[i] = temp;
+            temp = flats[min];
+            flats[min] = flats[k];
+            flats[k] = temp;
         }
-        return dwellingFloors[Id].getFlats();
+        return flats;
     }
+
 }
