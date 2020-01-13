@@ -6,7 +6,9 @@ import interfaces.Building;
 import interfaces.Floor;
 import interfaces.Space;
 
-public class Dwelling implements Building {
+import java.io.Serializable;
+
+public class Dwelling implements Building, Serializable {
 
     private DwellingFloor[] dwellingFloors;
 

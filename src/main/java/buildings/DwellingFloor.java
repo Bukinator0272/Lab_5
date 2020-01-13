@@ -5,7 +5,9 @@ import exceptions.SpaceIndexOutOfBoundsException;
 import interfaces.Floor;
 import interfaces.Space;
 
-public class DwellingFloor implements Floor {
+import java.io.Serializable;
+
+public class DwellingFloor implements Floor, Serializable {
 
     private Flat[] flats;
 

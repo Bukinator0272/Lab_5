@@ -4,7 +4,9 @@ import exceptions.InvalidRoomsCountException;
 import exceptions.InvalidSpaceAreaException;
 import interfaces.Space;
 
-public class Flat implements Space {
+import java.io.Serializable;
+
+public class Flat implements Space, Serializable {
 
     private double square;
     private int roomCount;

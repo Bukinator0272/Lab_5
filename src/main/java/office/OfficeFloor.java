@@ -5,7 +5,9 @@ import exceptions.SpaceIndexOutOfBoundsException;
 import interfaces.Floor;
 import interfaces.Space;
 
-public class OfficeFloor implements Floor {
+import java.io.Serializable;
+
+public class OfficeFloor implements Floor, Serializable {
 
     private Node head;
 

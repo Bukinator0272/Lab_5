@@ -6,7 +6,9 @@ import interfaces.Building;
 import interfaces.Floor;
 import interfaces.Space;
 
-public class OfficeBuilding implements Building {
+import java.io.Serializable;
+
+public class OfficeBuilding implements Building, Serializable {
 
     private static class Node {
         Node next;
