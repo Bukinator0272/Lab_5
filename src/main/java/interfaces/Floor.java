@@ -12,7 +12,7 @@ public interface Floor {
 
     Space getSpace(int index);
 
-    void updateSpace(int index, Space space);
+    void setSpace(int index, Space space);
 
     void addSpace(int index, Space space);
 

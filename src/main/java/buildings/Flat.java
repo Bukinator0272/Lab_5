@@ -6,7 +6,7 @@ import interfaces.Space;
 
 import java.io.Serializable;
 
-public class Flat implements Space, Serializable {
+public class Flat implements Space, Serializable, Cloneable {
 
     private double square;
     private int roomCount;
@@ -55,6 +55,37 @@ public class Flat implements Space, Serializable {
             throw new InvalidRoomsCountException();
         }
         this.roomCount = roomCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Flat (" + roomCount + ", " + square + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Flat flat = (Flat) o;
+        return Double.compare(flat.square, square) == 0 && roomCount == flat.roomCount;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(square);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + roomCount;
+        return result;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 }

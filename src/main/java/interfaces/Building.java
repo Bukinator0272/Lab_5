@@ -14,7 +14,7 @@ public interface Building {
 
     Floor getFloor(int Id);
 
-    void updateFloor(int Id, Floor newFloor);
+    void setFloor(int Id, Floor newFloor);
 
     Space getSpace(int Id);
 

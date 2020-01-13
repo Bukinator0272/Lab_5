@@ -19,21 +19,22 @@ public class Buildings {
         dataOutputStream.close();
     }
 
-//    public static Building inputBuilding(InputStream in) throws IOException {
-//        DataInputStream dataInputStream = new DataInputStream(in);
-//        Floor[] floors = new Floor[dataInputStream.readInt()];
-//        for (int i = 0; i < floors.length; i++) {
-//            Space[] spaces = new Space[dataInputStream.readInt()];
-//            for (Space space : spaces) {
-//                space.setRoomCount(dataInputStream.readInt());
-//                space.setSquare(dataInputStream.readDouble());
-//            }
-//            floors[i] = new Floor(spaces);
-//        }
-//
-//        dataInputStream.close();
-//        return new Building(floors);
-//    }
+    public static Building inputBuilding(InputStream in) throws IOException {
+        DataInputStream dataInputStream = new DataInputStream(in);
+        Floor[] floors = new Floor[dataInputStream.readInt()];
+        Building building = null;
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[dataInputStream.readInt()];
+            for (int j = 0; j < spaces.length; j++) {
+                spaces[j].setRoomCount(dataInputStream.readInt());
+                spaces[j].setSquare(dataInputStream.readDouble());
+                floors[i].setSpace(j, spaces[j]);
+            }
+            building.setFloor(i, floors[i]);
+        }
+        dataInputStream.close();
+        return building;
+    }
 
     public static void writeBuilding(Building building, Writer out) {
         PrintWriter printWriter = new PrintWriter(out);
@@ -48,19 +49,21 @@ public class Buildings {
         printWriter.close();
     }
 
-//    public static Building readBuilding(Reader in) throws IOException {
-//        StreamTokenizer streamTokenizer = new StreamTokenizer(in);
-//        Floor[] floors = new Floor[streamTokenizer.nextToken()];
-//        for (int i = 0; i < floors.length; i++) {
-//            Space[] spaces = new Space[streamTokenizer.nextToken()];
-//            for (Space space: spaces) {
-//                space.setRoomCount(streamTokenizer.nextToken());
-//                space.setSquare(streamTokenizer.nextToken());
-//            }
-//            floors[i] = new Floor(spaces);
-//        }
-//        return new Building(floors);
-//    }
+    public static Building readBuilding(Reader in) throws IOException {
+        StreamTokenizer streamTokenizer = new StreamTokenizer(in);
+        Floor[] floors = new Floor[streamTokenizer.nextToken()];
+        Building building = null;
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[streamTokenizer.nextToken()];
+            for (int j = 0; j < spaces.length; j++) {
+                spaces[j].setRoomCount(streamTokenizer.nextToken());
+                spaces[j].setSquare(streamTokenizer.nextToken());
+                floors[i].setSpace(j, spaces[j]);
+            }
+            building.setFloor(i, floors[i]);
+        }
+        return building;
+    }
 
     public static void serializeBuilding(Building building, OutputStream out) throws IOException {
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);

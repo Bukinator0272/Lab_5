@@ -7,8 +7,9 @@ import interfaces.Floor;
 import interfaces.Space;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-public class OfficeBuilding implements Building, Serializable {
+public class OfficeBuilding implements Building, Serializable, Cloneable {
 
     private static class Node {
         Node next;
@@ -136,7 +137,7 @@ public class OfficeBuilding implements Building, Serializable {
         return getNode(index).officeFloor;
     }
 
-    public void updateFloor(int index, Floor newFloor) {
+    public void setFloor(int index, Floor newFloor) {
         if ((index >= getFloorsCount()) || (index < 0)) {
             throw new FloorIndexOutOfBoundsException();
         }
@@ -171,7 +172,7 @@ public class OfficeBuilding implements Building, Serializable {
             sum += current.officeFloor.getSpacesCount();
             if (sum >= index) {
                 int indexOnFloor = current.officeFloor.getSpacesCount() - (sum - index);
-                current.officeFloor.updateSpace(indexOnFloor, newSpace);
+                current.officeFloor.setSpace(indexOnFloor, newSpace);
             }
         }
     }
@@ -248,5 +249,46 @@ public class OfficeBuilding implements Building, Serializable {
         }
         return offices;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Floor[] floors = getFloorsArray();
+        stringBuilder.append("OfficeBuilding (").append(getFloorsCount()).append(", ");
+        for (int i = 0; i < floors.length; i++) {
+            if (i > 0)
+                stringBuilder.append(", ");
+            stringBuilder.append(floors[i].toString());
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        OfficeBuilding that = (OfficeBuilding) o;
+        return Objects.equals(head, that.head);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((head == null) ? 0 : head.hashCode());
+        return result;
+    }
+
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        Floor floor = (Floor) super.clone();
+//        for (int i = 0; i < floor.getSpacesCount(); i++) {
+//            floor.setSpace(i, (Space) floor.getSpace(i).clone());
+//        }
+//        return floor;
+//    }
 
 }

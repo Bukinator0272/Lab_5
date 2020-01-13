@@ -6,6 +6,7 @@ import interfaces.Floor;
 import interfaces.Space;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class OfficeFloor implements Floor, Serializable {
 
@@ -121,7 +122,7 @@ public class OfficeFloor implements Floor, Serializable {
         return getNodeByIndex(index).office;
     }
 
-    public void updateSpace(int index, Space newSpace) {
+    public void setSpace(int index, Space newSpace) {
         if ((index >= getSpacesCount()) || (index < 0)) {
             throw new SpaceIndexOutOfBoundsException();
         }
@@ -157,4 +158,46 @@ public class OfficeFloor implements Floor, Serializable {
         }
         return officeBestSpace;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Space[] offices = getSpaceArray();
+        stringBuilder.append("OfficeFloor (").append(getRoomsCount()).append(", ");
+        for (int i = 0; i < offices.length; i++) {
+            if (i > 0)
+                stringBuilder.append(", ");
+            stringBuilder.append(offices[i].toString());
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        OfficeFloor that = (OfficeFloor) o;
+        return Objects.equals(head, that.head);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((head == null) ? 0 : head.hashCode());
+        return result;
+    }
+
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        Floor floor = (Floor) super.clone();
+//        for (int i = 0; i < floor.getSpacesCount(); i++) {
+//            floor.setSpace(i, (Space) floor.getSpace(i).clone());
+//        }
+//        return floor;
+//    }
+
 }

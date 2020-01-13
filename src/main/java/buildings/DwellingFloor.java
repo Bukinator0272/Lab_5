@@ -6,8 +6,9 @@ import interfaces.Floor;
 import interfaces.Space;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
-public class DwellingFloor implements Floor, Serializable {
+public class DwellingFloor implements Floor, Serializable, Cloneable {
 
     private Flat[] flats;
 
@@ -56,7 +57,7 @@ public class DwellingFloor implements Floor, Serializable {
         return flats[Id];
     }
 
-    public void updateSpace(int Id, Space newSpace) {
+    public void setSpace(int Id, Space newSpace) {
         if ((Id >= flats.length) || (Id < 0)) {
             throw new SpaceIndexOutOfBoundsException();
         }
@@ -106,5 +107,45 @@ public class DwellingFloor implements Floor, Serializable {
         }
         return flatBestSpace;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("DwellingFloor (").append(getSpacesCount()).append(", ");
+        for (int i = 0; i < flats.length; i++) {
+            if (i > 0)
+                stringBuilder.append(", ");
+            stringBuilder.append(flats[i].toString());
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        DwellingFloor that = (DwellingFloor) o;
+        return Arrays.equals(flats, that.flats);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(flats);
+        return result;
+    }
+
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        Floor floor = (Floor) super.clone();
+//        for (int i = 0; i < floor.getSpacesCount(); i++) {
+//            floor.setSpace(i, (Space) floor.getSpace(i).clone());
+//        }
+//        return floor;
+//    }
 
 }
